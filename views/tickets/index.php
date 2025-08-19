@@ -16,7 +16,14 @@
             <td><?= htmlspecialchars($ticket['request_type']) ?></td>
             <td><?= htmlspecialchars($ticket['priority']) ?></td>
             <td><?= htmlspecialchars($ticket['status']) ?></td>
-            <td><a href="/tickets/view/<?= $ticket['id'] ?>">Ver</a></td>
+            <td>
+                <a href="/tickets/view/<?= $ticket['id'] ?>">Ver</a>
+                <?php if ($ticket['status'] !== 'cerrado'): ?>
+                    <form method="POST" action="/tickets/close/<?= $ticket['id'] ?>" style="display:inline;">
+                        <button type="submit">Cerrar</button>
+                    </form>
+                <?php endif; ?>
+            </td>
         </tr>
     <?php endforeach; ?>
 </table>

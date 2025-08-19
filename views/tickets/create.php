@@ -1,5 +1,5 @@
 <h1>Crear Ticket</h1>
-<form method="POST" action="/tickets/store">
+<form method="POST" action="/tickets/store" enctype="multipart/form-data">
     <label>Título:</label>
     <input type="text" name="title" required><br>
 
@@ -25,6 +25,9 @@
 
     <label>ID Solicitante:</label>
     <input type="number" name="requested_by"><br>
+
+    <label>Captura de pantalla:</label>
+    <input type="file" name="screenshot"><br>
 
     <button type="submit">Guardar</button>
 </form>

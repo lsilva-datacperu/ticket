@@ -1,9 +1,11 @@
 <?php
 class TicketController extends BaseController {
     private $ticketModel;
+    private $attachmentModel;
 
     public function __construct() {
         $this->ticketModel = new Ticket();
+        $this->attachmentModel = new Attachment();
     }
 
     public function index() {
@@ -30,7 +32,31 @@ class TicketController extends BaseController {
             'module_id' => $_POST['module_id'],
             'requested_by' => $_POST['requested_by']
         ];
-        $this->ticketModel->create($data);
+        $ticketId = $this->ticketModel->create($data);
+
+        if ($ticketId && isset($_FILES['screenshot']) && $_FILES['screenshot']['error'] == UPLOAD_ERR_OK) {
+            $uploadDir = 'public/uploads/screenshots/';
+            $filename = uniqid() . '-' . basename($_FILES['screenshot']['name']);
+            $filepath = $uploadDir . $filename;
+
+            if (move_uploaded_file($_FILES['screenshot']['tmp_name'], $filepath)) {
+                $attachmentData = [
+                    'ticket_id' => $ticketId,
+                    'filename' => $filename,
+                    'filepath' => $filepath,
+                    'mime_type' => $_FILES['screenshot']['type'],
+                    'filesize' => $_FILES['screenshot']['size'],
+                    'uploaded_by' => $_POST['requested_by']
+                ];
+                $this->attachmentModel->create($attachmentData);
+            }
+        }
+
+        header('Location: /tickets');
+    }
+
+    public function close($id) {
+        $this->ticketModel->updateStatus($id, 'cerrado');
         header('Location: /tickets');
     }
 }

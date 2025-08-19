@@ -22,7 +22,7 @@ class Ticket {
             INSERT INTO tickets (code, title, description, request_type, priority, module_id, requested_by)
             VALUES (?, ?, ?, ?, ?, ?, ?)
         ");
-        return $stmt->execute([
+        $stmt->execute([
             $data['code'],
             $data['title'],
             $data['description'],
@@ -31,5 +31,11 @@ class Ticket {
             $data['module_id'],
             $data['requested_by']
         ]);
+        return $this->pdo->lastInsertId();
+    }
+
+    public function updateStatus($id, $status) {
+        $stmt = $this->pdo->prepare("UPDATE tickets SET status = ? WHERE id = ?");
+        return $stmt->execute([$status, $id]);
     }
 }

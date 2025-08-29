@@ -5,9 +5,9 @@ class Database {
 
     private function __construct() {
         $host = "localhost";
-        $dbname = "ticketing";
-        $user = "root";
-        $pass = "";
+        $dbname = "datacper_ticketing";
+        $user = "datacper_root";
+        $pass = "4PHlz5QPW&%M";
 
         try {
             $this->pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $user, $pass);
@@ -28,3 +28,4 @@ class Database {
         return $this->pdo;
     }
 }
+
